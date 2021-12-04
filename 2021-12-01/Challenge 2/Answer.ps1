@@ -6,10 +6,14 @@ $comparisons = [PSCustomObject]@{
     Decreased = 0
 }
 
-for ($i = 1; $i -lt $depthMeasures.Count; $i++) {
-    if ($depthMeasures[$i] -gt $depthMeasures[$i-1]) {
+for ($i = 1; $i -lt $depthMeasures.Count-2; $i++) {
+    $j = $i+2
+    $x = $i-1
+    $y = $x+2
+    
+    if (($depthMeasures[$i..$j] | Measure-Object -Sum).Sum -gt ($depthMeasures[$x..$y] | Measure-Object -Sum).Sum) {
         $comparisons.Increased++
-    } elseif ($depthMeasures[$i] -eq $depthMeasures[$i-1]) {
+    } elseif (($depthMeasures[$i..$j] | Measure-Object -Sum).Sum -eq ($depthMeasures[$x..$y] | Measure-Object -Sum).Sum) {
         $comparisons.equal++
     } else {
         $comparisons.Decreased++
